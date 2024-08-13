@@ -122,9 +122,10 @@ router.post('/signup', verifyRole, restrictTeacher, async (req, res) => {
         res.status(500).json({ message: 'Error creating user', error });
     }
 });
+
+
 router.get('/teachers', async (req, res) => {
     try {
-        console
         const queryText = `
             SELECT 
                 t.user_id, 
@@ -142,6 +143,133 @@ router.get('/teachers', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch teachers' });
     }
 });
+router.put('/teachers/:id', async (req, res) => {
+    const { id } = req.params;
+    const { email, role } = req.body;
+
+    try {
+        // Update the student's details in the users table
+        const queryText = `
+            UPDATE users
+            SET email = $1, role = $2
+            WHERE id = $3 AND role = 'Teacher'
+            RETURNING id, email, role
+        `;
+        const result = await pool.query(queryText, [email, role, id]);
+
+        // Check if the student was found and updated
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Teacher not found or not a student' });
+        }
+
+        res.json({ student: result.rows[0] });
+    } catch (error) {
+        console.error('Error updating teacher:', error);
+        res.status(500).json({ error: 'Failed to update teacher' });
+    }
+});
+router.delete('/teachers/:id', async (req,res)=>{
+    const { id } = req.params;
+    try {
+        // Start a transaction
+        await pool.query('BEGIN');
+
+        // Delete teacher
+        const result = await pool.query(
+            'DELETE FROM users WHERE id = $1 RETURNING id',
+            [id]
+        );
+
+        if (result.rows.length > 0) {
+            // Commit the transaction
+            await pool.query('COMMIT');
+            res.json({ message: 'Teacher deleted successfully' });
+        } else {
+            // Rollback if teacher not found
+            await pool.query('ROLLBACK');
+            res.status(404).json({ error: 'Teacher not found' });
+        }
+    } catch (error) {
+        await pool.query('ROLLBACK');
+        console.error('Error deleting teacher:', error);
+        res.status(500).json({ error: 'Failed to delete teacher' });
+    }
+})
+
+router.get('/students', async (req, res) => {
+    try {
+        const queryText = `
+            SELECT 
+                s.user_id, 
+                u.email, 
+                u.role
+            FROM 
+                students s
+            INNER JOIN 
+                users u ON s.user_id = u.id
+        `;
+        const result = await pool.query(queryText);
+        res.json({ students: result.rows });
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ error: 'Failed to fetch students' });
+    }
+});
+router.put('/students/:id', async (req, res) => {
+    console.log('req', req.params)
+    const { id } = req.params;
+    const { email, role } = req.body;
+    console.log(id);
+
+    try {
+        // Update the student's details in the users table
+        const queryText = `
+            UPDATE users
+            SET email = $1, role = $2
+            WHERE id = $3 AND role = 'Student'
+            RETURNING id, email, role
+        `;
+        const result = await pool.query(queryText, [email, role, id]);
+
+        // Check if the student was found and updated
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Student not found or not a student' });
+        }
+
+        res.json({ student: result.rows[0] });
+    } catch (error) {
+        console.error('Error updating student:', error);
+        res.status(500).json({ error: 'Failed to update student' });
+    }
+});
+router.delete('/students/:id', async (req,res)=>{
+    const { id } = req.params;
+    try {
+        // Start a transaction
+        await pool.query('BEGIN');
+
+        // Delete teacher
+        const result = await pool.query(
+            'DELETE FROM users WHERE id = $1 RETURNING id',
+            [id]
+        );
+
+        if (result.rows.length > 0) {
+            // Commit the transaction
+            await pool.query('COMMIT');
+            res.json({ message: 'Student deleted successfully' });
+        } else {
+            // Rollback if teacher not found
+            await pool.query('ROLLBACK');
+            res.status(404).json({ error: 'Student not found' });
+        }
+    } catch (error) {
+        await pool.query('ROLLBACK');
+        console.error('Error deleting student:', error);
+        res.status(500).json({ error: 'Failed to delete student' });
+    }
+})
+
 
 // Login Route
 router.post('/login', async (req, res) => {

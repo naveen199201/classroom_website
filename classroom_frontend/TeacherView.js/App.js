@@ -5,16 +5,19 @@ import Signup from './Signup';
 import ClassroomForm from './ClassroomForm';
 import StudentsList from './StudentList';
 import TeachersList from './TeacherList';
+import PrincipalView from './PrincipalView';
 // import Dashboard from './components/Dashboard';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<ClassroomForm />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/studentlist" element={<StudentsList />} />
         <Route path="/teacherlist" element={<TeachersList />} />
+        <Route path="/classrooms" element={<ClassroomForm />} />
+        <Route path="/principalview" element={<PrincipalView />} />
 
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
       </Routes>

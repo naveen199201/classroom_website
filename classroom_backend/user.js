@@ -23,8 +23,8 @@ const createUsersTable = async () => {
     CREATE TABLE IF NOT EXISTS students (
         user_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id),
-        CONSTRAINT classroom_foreign_key FOREIGN KEY (classroom_id)
-        REFERENCES classrooms(id)
+        CONSTRAINT classroom_foreign_key FOREIGN KEY (classroom_name)
+        REFERENCES classrooms(classroom_name)
     );
     `;
     await pool.query(queryText);

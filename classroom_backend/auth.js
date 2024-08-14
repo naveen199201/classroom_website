@@ -10,7 +10,7 @@ const ClassroomTable = async () => {
     const queryClassroom = `
     CREATE TABLE IF NOT EXISTS classrooms (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    classroom_name VARCHAR(255) UNIQUE NOT NULL,
     teacher_id INTEGER NOT NULL,
     FOREIGN KEY (teacher_id) REFERENCES teachers(user_id) ON DELETE CASCADE
     );
@@ -108,14 +108,14 @@ const parseTime = (timeStr) => {
 
 // Signup Route (for principal to create Teacher accounts and for teachers to create Student accounts)
 router.post('/signup', verifyRole, restrictTeacher, async (req, res) => {
-    const { email, password, role,name } = req.body;
+    const { email, password, role, name } = req.body;
 
     if (role !== 'Teacher' && role !== 'Student') {
         return res.status(400).json({ message: 'Invalid role' });
     }
 
     try {
-        const newUser = await createUser(email, name,password, role);
+        const newUser = await createUser(email, name, password, role);
         res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
         console.log(error);
@@ -128,9 +128,11 @@ router.get('/teachers', async (req, res) => {
     try {
         const queryText = `
             SELECT 
-                t.user_id, 
+                t.user_id,
+                t.is_class_assigned,
                 u.email, 
-                u.role
+                u.role,
+                u.name
             FROM 
                 teachers t
             INNER JOIN 
@@ -145,17 +147,17 @@ router.get('/teachers', async (req, res) => {
 });
 router.put('/teachers/:id', async (req, res) => {
     const { id } = req.params;
-    const { email, role } = req.body;
+    const { email, name } = req.body;
 
     try {
         // Update the student's details in the users table
         const queryText = `
             UPDATE users
-            SET email = $1, role = $2
-            WHERE id = $3 AND role = 'Teacher'
-            RETURNING id, email, role
+            SET email = $1, name = $2
+            WHERE id = $3 
+            RETURNING id, email, name, role
         `;
-        const result = await pool.query(queryText, [email, role, id]);
+        const result = await pool.query(queryText, [email, name, id]);
 
         // Check if the student was found and updated
         if (result.rows.length === 0) {
@@ -168,7 +170,7 @@ router.put('/teachers/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to update teacher' });
     }
 });
-router.delete('/teachers/:id', async (req,res)=>{
+router.delete('/teachers/:id', async (req, res) => {
     const { id } = req.params;
     try {
         // Start a transaction
@@ -202,7 +204,9 @@ router.get('/students', async (req, res) => {
             SELECT 
                 s.user_id, 
                 u.email, 
-                u.role
+                u.role,
+                u.name,
+                s.classroom_name
             FROM 
                 students s
             INNER JOIN 
@@ -218,31 +222,48 @@ router.get('/students', async (req, res) => {
 router.put('/students/:id', async (req, res) => {
     console.log('req', req.params)
     const { id } = req.params;
-    const { email, role } = req.body;
+    const { email, name, classroomName } = req.body;
     console.log(id);
 
     try {
         // Update the student's details in the users table
+        
         const queryText = `
             UPDATE users
-            SET email = $1, role = $2
-            WHERE id = $3 AND role = 'Student'
-            RETURNING id, email, role
-        `;
-        const result = await pool.query(queryText, [email, role, id]);
+            SET email = $1, name = $2
+            WHERE id = $3
+            RETURNING id, email, name, role;
+            `;
 
+        const updateStudentQuery = `
+            UPDATE students
+            SET classroom_name = $1
+            WHERE user_id = $2
+            RETURNING user_id, classroom_name;
+`;
+        // await client.query('BEGIN');
+        const userresult = await pool.query(queryText, [email, name, id]);
+        const studentresult = await pool.query(updateStudentQuery, [classroomName, id]);
+        // await client.query('COMMIT');
         // Check if the student was found and updated
-        if (result.rows.length === 0) {
+        if (userresult.rows.length === 0) {
+            return res.status(404).json({ error: 'Student not found or not a student' });
+        }
+        if (studentresult.rows.length === 0) {
             return res.status(404).json({ error: 'Student not found or not a student' });
         }
 
-        res.json({ student: result.rows[0] });
+        res.status(200).json({
+            user: userresult.rows[0],
+            student: studentresult.rows[0],
+          });
     } catch (error) {
+        // await client.query('ROLLBACK');
         console.error('Error updating student:', error);
         res.status(500).json({ error: 'Failed to update student' });
     }
 });
-router.delete('/students/:id', async (req,res)=>{
+router.delete('/students/:id', async (req, res) => {
     const { id } = req.params;
     try {
         // Start a transaction
@@ -292,7 +313,7 @@ router.post('/login', async (req, res) => {
 });
 
 
-router.post('/classrooms', verifyPrincipal, async (req, res) => {
+router.post('/classrooms', async (req, res) => {
 
     console.log('main body');
     ClassroomTable();
@@ -307,7 +328,7 @@ router.post('/classrooms', verifyPrincipal, async (req, res) => {
 
         // Insert the classroom
         const classroomResult = await pool.query(
-            'INSERT INTO classrooms (name, teacher_id) VALUES ($1, $2) RETURNING id;',
+            'INSERT INTO classrooms (classroom_name, teacher_id) VALUES ($1, $2) RETURNING id;',
             [name, teacher_id]
         );
 
@@ -338,22 +359,55 @@ router.post('/classrooms', verifyPrincipal, async (req, res) => {
         res.status(500).json({ error: 'Failed to create classroom' });
     }
 });
+router.get('/classroomnames', async (req, res) => {
+    try {
+        const queryText = `
+            SELECT 
+               *
+            FROM 
+                classrooms 
+        `;
+        const result = await pool.query(queryText);
+        res.json({ classroomnames: result.rows });
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ error: 'Failed to fetch students' });
+    }
+});
+router.get('/students/:teacherid',async (req, res) => {
+    const { teacherid } = req.params;
+    try {
+        const queryText = `
+            with class as (SELECT 
+               classroom_name
+            FROM 
+                classrooms WHERE teacher_id = $1 )
+            select students.*, users.name,users.email from students join class on students.classroom_name =class.classroom_name
+			left join users on users.id=students.user_id 
+        `;
+        const result = await pool.query(queryText,[teacherid]);
+        res.json({ classroomstudents: result.rows });
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ error: 'Failed to fetch students' });
+    }
+});
 
 router.post('/update-subjects', async (req, res) => {
     try {
         update_query = ""
-    // const body = [{'period_id':'1',
-    //     'subject_name':'Hindi'
-    // },{
-    //     'period_id':'2',
-    //     'subject_name':'Telugu'
-    // }];
-    for (const data of req.body){
-        const { period_id, subject_name } = data;
-        update_query = update_query+"update periods set subject_name='"+subject_name+"' where period_id="+period_id+";"
-    }
-    console.log(update_query)
-    await pool.query(update_query);
+        // const body = [{'period_id':'1',
+        //     'subject_name':'Hindi'
+        // },{
+        //     'period_id':'2',
+        //     'subject_name':'Telugu'
+        // }];
+        for (const data of req.body) {
+            const { period_id, subject_name } = data;
+            update_query = update_query + "update periods set subject_name='" + subject_name + "' where period_id=" + period_id + ";"
+        }
+        console.log(update_query)
+        await pool.query(update_query);
     } catch (error) {
         await pool.query('ROLLBACK');
         console.error('Error updating subjects:', error);

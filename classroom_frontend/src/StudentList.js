@@ -19,7 +19,7 @@ const StudentsList = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/auth/students', {
+        const response = await axios.get('https://classroom-website-1.onrender.com/api/auth/students', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -53,7 +53,7 @@ const StudentsList = () => {
   const handleDelete = async (studentId) => {
     if (window.confirm('Do you want to delete this student?')) {
       try {
-        await axios.delete(`http://localhost:3000/api/auth/students/${studentId}`, {
+        await axios.delete(`https://classroom-website-1.onrender.com/api/auth/students/${studentId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -11,7 +11,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
+      const response = await axios.post('https://classroom-website-1.onrender.com/api/auth/login', { email, password });
       localStorage.setItem('authtoken', response.data.token);
       localStorage.setItem('id',response.data.id );
       localStorage.setItem('role',response.data.role)

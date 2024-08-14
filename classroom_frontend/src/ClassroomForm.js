@@ -23,7 +23,7 @@ const ClassroomForm = () => {
 
   useEffect(() => {
     // Fetch teachers for the dropdown
-    axios.get('http://localhost:3000/api/auth/teachers')
+    axios.get('https://classroom-website-1.onrender.com/api/auth/teachers')
       .then(response => {
         const unassignedTeachers = response.data.teachers.filter(teacher => !teacher.is_class_assigned);
         setTeachers(unassignedTeachers);
@@ -52,7 +52,7 @@ const ClassroomForm = () => {
       schedules
     };
 
-    axios.post('http://localhost:3000/api/auth/classrooms', data)
+    axios.post('https://classroom-website-1.onrender.com/api/auth/classrooms', data)
       .then(response => {
         alert('Classroom created successfully!');
       })

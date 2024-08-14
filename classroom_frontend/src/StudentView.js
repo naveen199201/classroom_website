@@ -16,7 +16,7 @@ const StudentView = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/auth/studentlist`, {
+        const response = await axios.get(`https://classroom-website-1.onrender.com/api/auth/studentlist`, {
           headers: {
             Authorization: `Bearer ${token}`, // Add authorization header if needed
           },

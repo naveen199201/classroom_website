@@ -21,7 +21,7 @@ const Studentupdateform = ({ studentemail, studentname, userid, classname, onClo
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/auth/classroomnames');
+        const response = await axios.get('https://classroom-website-1.onrender.com/api/auth/classroomnames');
         setClassrooms(response.data.classroomnames);
       } catch (error) {
         console.error('Error fetching classrooms:', error);
@@ -34,7 +34,7 @@ const Studentupdateform = ({ studentemail, studentname, userid, classname, onClo
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/api/auth/students/${id}`, { email, name, classroomName: selectedClassroom });
+      await axios.put(`https://classroom-website-1.onrender.com/api/auth/students/${id}`, { email, name, classroomName: selectedClassroom });
       onClose();
     } catch (error) {
       alert('Update failed');

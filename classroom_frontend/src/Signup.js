@@ -14,7 +14,7 @@ function Signup() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:3000/api/auth/signup',
+        'https://classroom-website-1.onrender.com/api/auth/signup',
         { email, password, name,role },
         { headers: { Authorization: `Bearer ${token}` } }
       );

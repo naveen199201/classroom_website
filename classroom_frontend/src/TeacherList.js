@@ -30,7 +30,7 @@ const TeachersList = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/auth/teachers'); 
+        const response = await axios.get('https://classroom-website-1.onrender.com/api/auth/teachers'); 
         setTeachers(response.data.teachers);
       } catch (err) {
         setError(err.message);
@@ -59,7 +59,7 @@ const TeachersList = () => {
   const handleDelete = async (teacherId) => {
     if (window.confirm('Do you want to delete this teacher?')) {
       try {
-        await axios.delete(`http://localhost:3000/api/auth/teachers/${teacherId}`, {
+        await axios.delete(`https://classroom-website-1.onrender.com/api/auth/teachers/${teacherId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTeachers(teachers.filter((teacher) => teacher.user_id !== teacherId));

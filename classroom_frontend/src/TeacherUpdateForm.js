@@ -14,7 +14,7 @@ const Teacherupdateform = ({ teacheremail, teachername, userid, onClose }) => {
     e.preventDefault();
     try {
       console.log(id);
-      const response = await axios.put(`http://localhost:3000/api/auth/teachers/${id}`, { email, name });
+      const response = await axios.put(`https://classroom-website-1.onrender.com/api/auth/teachers/${id}`, { email, name });
       console.log(response);
       onClose();
     } catch (error) {

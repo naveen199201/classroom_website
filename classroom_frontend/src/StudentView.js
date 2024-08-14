@@ -1,63 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Table,TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-
-import './App.css';
+import React from 'react';
+import { Button, Box, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const StudentView = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const token = localStorage.getItem('authtoken'); // Retrieve token from local storage
+  const navigate = useNavigate();
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+  const handleLogout = () => {
+    // Clear the authentication token
+    localStorage.removeItem('authtoken');
+    navigate('/');
+  };
 
-  
-  console.log(students);
-
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await axios.get(`https://classroom-website-1.onrender.com/api/auth/studentlist`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Add authorization header if needed
-          },
-        });
-        console.log(response);
-        setStudents(response.data.classroomstudents); // Assuming the response contains a 'students' array
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStudents();
-  }, [token]);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
   return (
-    <div className='main-container'>
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead className='table-header'>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {students.map((student,index) => (
-            <TableRow index={student.user_id}>
-              <TableCell>{student.user_id}</TableCell>
-              <TableCell>{student.name}</TableCell>
-              <TableCell>{student.email}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-       
-      </div>
+    <Box sx={{ display: 'flex', flexDirection:'column', alignItems: 'center', px: 2, py: '10%' }}>
+     <Stack spacing={3}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleNavigation('/classmates')}
+      >
+        Classmates
+      </Button>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={handleLogout}
+      >
+        Logout
+      </Button>
+      </Stack> 
+    </Box>
   );
 };
 

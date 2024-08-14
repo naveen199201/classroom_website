@@ -9,6 +9,7 @@ import PrincipalView from './PrincipalView';
 import ClassList from './ClassList';
 import TeacherView from './TeacherView';
 import StudentView from './StudentView';
+import Classmates from './Classmates';
 // import Dashboard from './components/Dashboard';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/teacherview" element={<TeacherView />} />
         <Route path="/studentview" element={<StudentView />} />
         <Route path="/classlist" element={<ClassList />} />
+        <Route path="/classmates" element={<Classmates />} />
 
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
       </Routes>

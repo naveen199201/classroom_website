@@ -75,7 +75,7 @@ function Signup() {
             fullWidth
             sx={{ mt: 2, py:2 }}
           >
-            Create Account
+            Create User
           </Button>
         </form>
       </Box>

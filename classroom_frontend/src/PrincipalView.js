@@ -8,6 +8,11 @@ const PrincipalView = () => {
   const handleNavigation = (path) => {
     navigate(path);
   };
+  const handleLogout = () => {
+    // Clear the authentication token
+    localStorage.removeItem('authtoken');
+    navigate('/');
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection:'column', alignItems: 'center', p: 2 }}>
@@ -39,6 +44,13 @@ const PrincipalView = () => {
         onClick={() => handleNavigation('/signup')}
       >
         Create User
+      </Button>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() => handleLogout('/classrooms')}
+      >
+        Logout
       </Button>
       </Stack>
     </Box>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, Button,TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, Button,TableBody, Typography, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Studentupdateform from './Studentupdateform';
@@ -74,6 +74,8 @@ const ClassList = () => {
 
   return (
     <div className='main-container'>
+        <Typography variant="h2" gutterBottom>Students List</Typography>
+
     <TableContainer component={Paper}>
       <Table>
         <TableHead className='table-header'>
@@ -117,11 +119,10 @@ const ClassList = () => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '80%',
-            maxWidth: 500,
+            maxWidth: 600,
             bgcolor: 'background.paper',
             boxShadow: 24,
-            p: 4,
+            p: 6,
             borderRadius: 2,
           }}
         >

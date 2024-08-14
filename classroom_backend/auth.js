@@ -115,7 +115,7 @@ router.post('/signup', verifyRole, restrictTeacher, async (req, res) => {
 });
 
 
-router.get('/teachers', async (req, res) => {
+router.get('/teachers',verifyPrincipal, async (req, res) => {
     try {
         const queryText = `
             SELECT 
@@ -136,7 +136,7 @@ router.get('/teachers', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch teachers' });
     }
 });
-router.put('/teachers/:id', async (req, res) => {
+router.put('/teachers/:id', verifyPrincipal,async (req, res) => {
     const { id } = req.params;
     const { email, name } = req.body;
 
@@ -161,7 +161,7 @@ router.put('/teachers/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to update teacher' });
     }
 });
-router.delete('/teachers/:id', async (req, res) => {
+router.delete('/teachers/:id',verifyPrincipal, async (req, res) => {
     const { id } = req.params;
     try {
         // Start a transaction
@@ -295,7 +295,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/classrooms', async (req, res) => {
+router.post('/classrooms',verifyPrincipal, async (req, res) => {
     ClassroomTable();
     const { name, teacher_id, schedules } = req.body;
     try {

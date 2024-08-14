@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const TeacherView = () => {
@@ -7,9 +7,15 @@ const TeacherView = () => {
   const handleNavigation = (path) => {
     navigate(path);
   };
+  const handleLogout = () => {
+    // Clear the authentication token
+    localStorage.removeItem('authtoken');
+    navigate('/');
+  };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', p: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection:'column', alignItems: 'center', px: 2, py: '10%' }}>
+     <Stack spacing={3}>
       <Button
         variant="contained"
         color="primary"
@@ -17,20 +23,7 @@ const TeacherView = () => {
       >
         Class
       </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => handleNavigation('/teacherlist')}
-      >
-        Teachers
-      </Button>
-      <Button
-        variant="contained"
-        color="success"
-        onClick={() => handleNavigation('/classrooms')}
-      >
-        create Classroom
-      </Button>
+
       <Button
         variant="contained"
         color="warning"
@@ -38,6 +31,14 @@ const TeacherView = () => {
       >
         Create User
       </Button>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() => handleLogout('/classrooms')}
+      >
+        Logout
+      </Button>
+      </Stack> 
     </Box>
   );
 };

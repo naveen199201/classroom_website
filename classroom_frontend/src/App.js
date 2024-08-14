@@ -6,6 +6,8 @@ import ClassroomForm from './ClassroomForm';
 import StudentsList from './StudentList';
 import TeachersList from './TeacherList';
 import PrincipalView from './PrincipalView';
+import ClassList from './ClassList';
+import TeacherView from './TeacherView';
 // import Dashboard from './components/Dashboard';
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
         <Route path="/teacherlist" element={<TeachersList />} />
         <Route path="/classrooms" element={<ClassroomForm />} />
         <Route path="/principalview" element={<PrincipalView />} />
+        <Route path="/teacherview" element={<TeacherView />} />
+        <Route path="/classlist" element={<ClassList />} />
 
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
       </Routes>

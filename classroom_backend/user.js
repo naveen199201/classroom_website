@@ -49,9 +49,6 @@ const createPrincipalAccount = async () => {
             'shhhhh', // Use environment variable for secret in production
             { expiresIn: '1h' }
         );
-
-        console.log('Principal account created');
-        console.log('JWT Token for Principal:', token);
     }
 };
 

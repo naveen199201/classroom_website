@@ -10,7 +10,8 @@ import {
   Select,
   MenuItem,
   Grid,
-  IconButton
+  IconButton,
+  Container
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -62,9 +63,10 @@ const ClassroomForm = () => {
   };
 
   return (
+    <Container className='main-container'>
     <Box sx={{ p: 3, maxWidth: 600, mx: 'auto', boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Create a New Classroom
+        Create Classroom
       </Typography>
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth sx={{ mb: 2 }}>
@@ -156,17 +158,18 @@ const ClassroomForm = () => {
           </Grid>
         ))}
 
-        <Box textAlign="center" sx={{ mb: 2 }}>
+        <Box textAlign="center" sx={{ mb: 2}}>
           <IconButton color="primary" onClick={addSchedule}>
             <AddIcon />
           </IconButton>
         </Box>
 
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{py:2}}>
           Create Classroom
         </Button>
       </form>
     </Box>
+    </Container>
   );
 };
 

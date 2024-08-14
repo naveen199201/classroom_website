@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Stack} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const PrincipalView = () => {
@@ -10,7 +10,8 @@ const PrincipalView = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', p: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection:'column', alignItems: 'center', p: 2 }}>
+      <Stack spacing={2}>
       <Button
         variant="contained"
         color="primary"
@@ -39,6 +40,7 @@ const PrincipalView = () => {
       >
         Create User
       </Button>
+      </Stack>
     </Box>
   );
 };

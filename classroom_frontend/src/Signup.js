@@ -5,7 +5,9 @@ import { TextField, Select, MenuItem, Button, Container, Typography, Box } from 
 function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [role, setRole] = useState('teacher');
+  
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -13,7 +15,7 @@ function Signup() {
       const token = localStorage.getItem('token');
       await axios.post(
         'http://localhost:3000/api/auth/signup',
-        { email, password, role },
+        { email, password, name,role },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert('User created successfully');
@@ -23,19 +25,10 @@ function Signup() {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 4,
-          p: 3,
-          borderRadius: 1,
-          boxShadow: 1,
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
+    <Container className='main-container'>
+    <Box sx={{ p: 3, maxWidth: 600, mx: 'auto', boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
+
+        <Typography variant="h4" component="h1" gutterBottom>
           Signup
         </Typography>
         <form onSubmit={handleSignup} style={{ width: '100%' }}>
@@ -57,6 +50,15 @@ function Signup() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <Select
             fullWidth
             margin="normal"
@@ -71,7 +73,7 @@ function Signup() {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, py:2 }}
           >
             Create Account
           </Button>

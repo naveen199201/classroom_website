@@ -4,6 +4,7 @@ import { Table, Button,TableBody, TableCell, TableContainer, TableHead, TableRow
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Studentupdateform from './Studentupdateform';
+import './App.css';
 
 const ClassList = () => {
   const [students, setStudents] = useState([]);
@@ -72,10 +73,10 @@ const ClassList = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
+    <div className='main-container'>
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
+        <TableHead className='table-header'>
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell>Name</TableCell>

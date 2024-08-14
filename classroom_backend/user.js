@@ -53,7 +53,7 @@ const createPrincipalAccount = async () => {
 };
 
 // Create a new user (only by principal)
-const createUser = async (email,name, password, role) => {
+const createUser = async (email, password, name,role ) => {
     // Ensure that the role is valid
     
     if (!['Teacher', 'Student'].includes(role)) {
@@ -62,12 +62,12 @@ const createUser = async (email,name, password, role) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const insertText = `
-    INSERT INTO users (email,name, password, role) 
+    INSERT INTO users (email, password, name,role ) 
     VALUES ($1, $2, $3, $4)
     RETURNING id, name,email, role
     `;
     
-    const result = await pool.query(insertText, [email,name, hashedPassword, role]);
+    const result = await pool.query(insertText, [email, hashedPassword, name,role]);
     const userId = result.rows[0].id;
 
     if (role === 'Teacher') {

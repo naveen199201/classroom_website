@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material';
 import Studentupdateform from './Studentupdateform';
-
+import './App.css';
 const StudentsList = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,11 +67,11 @@ const StudentsList = () => {
   };
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>Students List</Typography>
+    <div className='main-container'>
+      <Typography variant="h2" gutterBottom>Students List</Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead className='table-header'>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
@@ -112,11 +112,10 @@ const StudentsList = () => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '80%',
-            maxWidth: 500,
+            maxWidth: 600,
             bgcolor: 'background.paper',
             boxShadow: 24,
-            p: 4,
+            p: 6,
             borderRadius: 2,
           }}
         >

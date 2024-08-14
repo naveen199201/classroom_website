@@ -15,6 +15,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import Teacherupdateform from './TeacherUpdateForm';
+import './App.css';
 
 const TeachersList = () => {
   const [teachers, setTeachers] = useState([]);
@@ -70,13 +71,13 @@ const TeachersList = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
+    <div className='main-container'>
+      <Typography variant="h2" gutterBottom>
         Teachers List
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead  className='table-header'>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
@@ -126,10 +127,10 @@ const TeachersList = () => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            maxWidth: 600,
             bgcolor: 'background.paper',
             boxShadow: 24,
-            p: 4,
+            p: 6,
             borderRadius: 2,
           }}
         >
@@ -141,7 +142,7 @@ const TeachersList = () => {
           />
         </Box>
       </Modal>
-    </Box>
+    </div>
   );
 };
 

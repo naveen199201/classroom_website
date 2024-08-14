@@ -51,12 +51,12 @@ const Studentupdateform = ({ studentemail, studentname, userid, classname, onClo
         gap: 2,
         width: 400,
         p: 3,
-        bgcolor: 'background.paper',
-        boxShadow: 1,
+        bgcolor: '#fefefe',
+        boxShadow: 2,
         borderRadius: 2,
       }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h4" component="h2" gutterBottom>
         Update Student
       </Typography>
       <TextField
@@ -89,7 +89,7 @@ const Studentupdateform = ({ studentemail, studentname, userid, classname, onClo
           ))}
         </Select>
       </FormControl>
-      <Button type="submit" variant="contained" color="primary" fullWidth>
+      <Button type="submit" variant="contained" color="primary" sx={{py:2}} fullWidth>
         Update Account
       </Button>
     </Box>

@@ -14,8 +14,17 @@ function Login() {
       const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
       localStorage.setItem('authtoken', response.data.token);
       localStorage.setItem('id',response.data.id );
-      console.log(response.data);
-      navigate('/classlist');
+      localStorage.setItem('role',response.data.role)
+      const userRole=response.data.role
+      if(userRole === 'Principal'){
+      navigate('/principalview');
+      }
+      else if(userRole === 'Teacher'){
+        navigate('/teacherview');
+        }
+        else if(userRole === 'Student'){
+          navigate('/studentview');
+        }
     } catch (error) {
       alert('Login failed');
     }

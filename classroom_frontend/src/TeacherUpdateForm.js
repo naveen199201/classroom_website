@@ -23,17 +23,20 @@ const Teacherupdateform = ({ teacheremail, teachername, userid, onClose }) => {
   };
 
   return (
-    <Container maxWidth="xs">
+    // <Container maxWidth="xs">
       <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 4,
-          p: 3,
-          borderRadius: 1,
-          boxShadow: 1,
-        }}
+      component="form"
+      onSubmit={handleUpdate}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        width: 400,
+        p: 3,
+        bgcolor: '#fefefe',
+        boxShadow: 2,
+        borderRadius: 2,
+      }}
       >
         <Typography variant="h4" gutterBottom>
           Update Teacher
@@ -62,13 +65,13 @@ const Teacherupdateform = ({ teacheremail, teachername, userid, onClose }) => {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, py: 2}}
           >
             Update Account
           </Button>
         </form>
       </Box>
-    </Container>
+    // </Container>
   );
 }
 

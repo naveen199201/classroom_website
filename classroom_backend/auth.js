@@ -101,13 +101,13 @@ const parseTime = (timeStr) => {
 };
 
 router.post('/signup', verifyRole, restrictTeacher, async (req, res) => {
-    const { email, password, role, name } = req.body;
+    const { email, password, name,role  } = req.body;
 
     if (role !== 'Teacher' && role !== 'Student') {
         return res.status(400).json({ message: 'Invalid role' });
     }
     try {
-        const newUser = await createUser(email, name, password, role);
+        const newUser = await createUser(email, password, name,role );
         res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
         res.status(500).json({ message: 'Error creating user', error });
@@ -289,7 +289,7 @@ router.post('/login', async (req, res) => {
             expiresIn: '1h',
         });
 
-        res.json({ "token": token, 'id': user.id, message: 'Login successful' });
+        res.json({ "token": token, 'id': user.id,'role':user.role, message: 'Login successful' });
     } catch (error) {
         res.status(500).json({ message: 'Error during login', error });
     }
@@ -354,7 +354,6 @@ router.get('/classroomnames', async (req, res) => {
 
 router.get('/studentlist/:classname?', async (req, res) => {
     const { classname } = req.params;
-    
     const token = req.header('Authorization').replace('Bearer ', '');
     const user = jwt.verify(token, 'shhhhh');
    
@@ -371,6 +370,20 @@ router.get('/studentlist/:classname?', async (req, res) => {
             left join users on users.id=students.user_id 
         `;
         result = await pool.query(queryText, [teacher_id]);
+        
+    }
+    if (user.role=='Student') {
+        const student_id = user.id;
+        
+        const queryText = `
+            with class as (SELECT 
+               classroom_name
+            FROM 
+                students WHERE user_id = $1 )
+            select students.*, users.name,users.email from students join class on students.classroom_name =class.classroom_name
+            left join users on users.id=students.user_id 
+        `;
+        result = await pool.query(queryText, [student_id]);
         
     }
     
